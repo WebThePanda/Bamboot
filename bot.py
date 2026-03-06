@@ -24,6 +24,20 @@ bot = commands.Bot(command_prefix="b! ", intents=intents)
 
 # Commands
 
+@bot.command(name="purge")
+@commands.has_permission(manage_messages=True)
+async def purge(ctx, amount: int):
+    if amount <= 0:
+        await ctx.send("Please specify a number greater than zero.")
+        return
+    
+    try:
+        deleted = await ctx.channel.purge(limit=amount + 1)
+        await ctx.send(f"Purged {len(deleted) - 1} messages.", delete_after=5)
+    except discord.Forbidden:
+        await ctx.send("I do not have the 'Manage Messages' permission to do this.")
+    except Exception as e:
+        await ctx.send(f"An error occured: {e}")
 
 
 # Events
@@ -42,5 +56,12 @@ async def on_member_join(member):
     embed.set_footer(text="Made by WebThePanda")
     if channel:
         await channel.send(embed=embed)
+
+# Error
+
+@purge.error
+async def purge_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("You do not have the 'Manage Messages' permission to use this command.")
 
 bot.run(token)
