@@ -103,8 +103,9 @@ async def sotw(ctx, dur: int):
     channel = bot.get_channel(channel_id)
     generalChat_id = 1443544545420771378
 
-    winnerRole = 1479924640754307103
-    
+    winnerRoleID = 1479924640754307103
+    winnerRole = ctx.guild.get_role(winnerRoleID)
+
     panda = 502141502038999041
     cats = 972943470023041044
     bamboot = 1479571065549357362
