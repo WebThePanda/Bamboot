@@ -136,7 +136,7 @@ async def sotw(ctx, dur: int):
             "**WebThePanda (Owner): 0** votes\n"
             "**Cats (Cool Guy): 0** votes\n"
             "**Bamboot (Bot): 0** votes\n\n"
-            "<t:{endTimeUnix}:R>"
+            "Time Remaining: <t:{endTimeUnix}:R>"
         ),
         colour=discord.Color.blurple()
     )
