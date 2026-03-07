@@ -121,7 +121,7 @@ async def sotw(ctx, dur: int):
     if channel:
         view = SOTWButtons(panda_id=panda, cats_id=cats, bamboot_id=bamboot, filename=file_name)
         msg = await channel.send(embed=embed, view=view)
-        await ctx.send(f"Poll started in {channel.mention} for 2 minutes!")
+        await ctx.send(f"Poll started in {channel.mention} for {dur} minutes!")
 
         await asyncio.sleep(duration)
 
@@ -142,7 +142,7 @@ async def sotw(ctx, dur: int):
 
         end_embed = discord.Embed(
             title="Staff of The Week - Results",
-            description=f"The results are in!\n\nWinner: **{winner_name}** with **{scores[winner_]}** votes.\n\nCongratulate them in <#{generalChat_id}>!",
+            description=f"The results are in!\n\nWinner: **{winner_name}** with **{scores[winner_name]}** votes.\n\nCongratulate them in <#{generalChat_id}>!",
             color=discord.Color.gold()
         )
         if member:
