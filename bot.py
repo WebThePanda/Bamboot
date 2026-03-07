@@ -148,6 +148,8 @@ async def sotw(ctx, dur: int):
         )
         if member:
             try:
+                for old_winner in winnerRole.members:
+                    await old_winner.remove_roles(winnerRole)
                 await member.add_roles(winnerRole)
             except discord.Forbidden:
                 pass
