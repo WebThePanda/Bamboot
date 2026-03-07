@@ -3,6 +3,8 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
+import json
+import asyncio
 
 # Load token and id from .env
 load_dotenv()
@@ -20,31 +22,77 @@ bot = commands.Bot(command_prefix="b! ", intents=intents)
 
 # Functions
 
+
+
+# Classes
+
 class SOTWButtons(discord.ui.View):
-    def __init__(self, panda_id, cats_id, bamboot_id):
+    def __init__(self, panda_id, cats_id, bamboot_id, filename):
         super().__init__(timeout=None)
-        
         self.p_id = panda_id
         self.c_id = cats_id
         self.b_id = bamboot_id
+        self.filename = filename
 
-    @discord.ui.button(label="Panda", style=discord.ButtonStyle.blurple)
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as f:
+                data = json.load(f)
+                self.p_votes = data.get("p", 0)
+                self.c_votes = data.get("c", 0)
+                self.b_votes = data.get("b", 0)
+                self.voters = set(data.get("voters", []))
+        else:
+            self.p_votes = 0
+            self.c_votes = 0
+            self.b_votes = 0
+            self.voters = set()
+    
+    def save_data(self):
+        with open(self.filename, "w") as f:
+            json.dump({
+                "p": self.p_votes, "c": self.c_votes, "b": self.b_votes,
+                "voters": list(self.voters)
+            }, f)
+
+    async def update_embed(self, interaction: discord.Interaction):
+        embed = interaction.message.embeds[0]
+        embed.description = (
+            "Staff of The Week!\nVote for this week's best staff!\n\nThis weeks choices are:"
+            f"**Panda (Owner):** {self.p_votes} votes\n"
+            f"**Cats (Owner's Alt):** {self.c_votes} votes\n"
+            f"**Bamboot (Bot):** {self.b_votes} votes"
+        )
+        await interaction.response.edit_message(embed=embed, view=self)
+
+    @discord.ui.button(label="Vote Panda", style=discord.ButtonStyle.blurple)
     async def panda_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
-        user = interaction.guild.get_member(self.p_id)
-        name = user.display_name if user else "Panda"
-        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
+        if interaction.user.id in self.voters:
+            return await interaction.response.send_message("You already voted!", ephemeral=True)
+        
+        self.p_votes += 1
+        self.voters.add(interaction.user.id)
+        self.save_data()
+        await self.update_embed(interaction)
 
-    @discord.ui.button(label="Cats", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="Vote Cats", style=discord.ButtonStyle.blurple)
     async def cats_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
-        user = interaction.guild.get_member(self.c_id)
-        name = user.display_name if user else "Cats"
-        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
+        if interaction.user.id in self.voters:
+            return await interaction.response.send_message("You already voted!", ephemeral=True)
+        
+        self.c_votes += 1
+        self.voters.add(interaction.user.id)
+        self.save_data()
+        await self.update_embed(interaction)
 
-    @discord.ui.button(label="Bamboot", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="Vote Bamboot", style=discord.ButtonStyle.blurple)
     async def bamboot_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
-        user = interaction.guild.get_member(self.b_id)
-        name = user.display_name if user else "Bamboot"
-        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
+        if interaction.user.id in self.voters:
+            return await interaction.response.send_message("You already voted!", ephemeral=True)
+        
+        self.b_votes += 1
+        self.voters.add(interaction.user.id)
+        self.save_data()
+        await self.update_embed(interaction)
 
 # Commands
 
@@ -53,10 +101,14 @@ class SOTWButtons(discord.ui.View):
 async def sotw(ctx):
     channel_id = 1479877488510500956
     channel = bot.get_channel(channel_id)
+    generalChat_id = 1443544545420771378
+    
     panda = 502141502038999041
     cats = 972943470023041044
     bamboot = 1479571065549357362
-    ctx=ctx
+    
+    file_name = "sotw_data.json"
+    duration = 60
 
     embed = discord.Embed(
         title="Staff of The Week",
@@ -65,9 +117,28 @@ async def sotw(ctx):
     )
 
     if channel:
-        view = SOTWButtons(panda_id=panda, cats_id=cats, bamboot_id=bamboot)
-        await channel.send(embed=embed, view=view)
-        await ctx.send("Poll made successfully!")
+        view = SOTWButtons(panda_id=panda, cats_id=cats, bamboot_id=bamboot, filename=file_name)
+        msg = await channel.send(embed=embed, view=view)
+        await ctx.send(f"Poll started in {channel.mention} for 2 minutes!")
+
+        await asyncio.sleep(duration)
+
+        for child in view.children:
+            child.disabled = True
+        
+        scores = {"WebThePanda": view.p_votes, "Cats": view.c_votes, "Bamboot": view.b_id}
+        winner = max(scores, key=scores.get)
+
+        end_embed = discord.Embed(
+            title="Staff of The Week - Results",
+            description=f"The results are in!\n\n**Winner:** {winner} with {scores[winner]} votes.\n\nCongratulate them in <#{generalChat_id}>!",
+            color=discord.Color.gold()
+        )
+        await msg.edit(embed=end_embed)
+
+        if os.path.exists(file_name):
+            os.remove(file_name)
+
 
 @bot.command(name="purge")
 @commands.has_permissions(manage_messages=True)
