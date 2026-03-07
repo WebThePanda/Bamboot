@@ -20,7 +20,31 @@ bot = commands.Bot(command_prefix="b! ", intents=intents)
 
 # Functions
 
+class SOTWButtons(discord.ui.View):
+    def __init__(self, panda_id, cats_id, bamboot_id):
+        super().__init__(timeout=None)
+        
+        self.p_id = panda_id
+        self.c_id = cats_id
+        self.b_id = bamboot_id
 
+    @discord.ui.button(label="Panda", style=discord.ButtonStyle.blurple)
+    async def panda_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
+        user = interaction.guild.get_member(self.p_id)
+        name = user.display_name if user else "Panda"
+        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
+
+    @discord.ui.button(label="Cats", style=discord.ButtonStyle.blurple)
+    async def cats_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
+        user = interaction.guild.get_member(self.c_id)
+        name = user.display_name if user else "Cats"
+        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
+
+    @discord.ui.button(label="Bamboot", style=discord.ButtonStyle.blurple)
+    async def bamboot_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
+        user = interaction.guild.get_member(self.b_id)
+        name = user.display_name if user else "Bamboot"
+        await interaction.response.send_message("You voted {name} for Staff of The Week.", ephemeral=True)
 
 # Commands
 
@@ -41,7 +65,9 @@ async def sotw(ctx):
     )
 
     if channel:
-        await channel.send(embed=embed)
+        view = SOTWButtons(panda_id=panda, cats_id=cats, bamboot_id=bamboot)
+        await channel.send(embed=embed, view=view)
+        await ctx.send("Poll made successfully!")
 
 @bot.command(name="purge")
 @commands.has_permissions(manage_messages=True)
