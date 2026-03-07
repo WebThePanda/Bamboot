@@ -173,9 +173,9 @@ async def purge(ctx, amount: int):
         deleted = await ctx.channel.purge(limit=amount + 1)
         await ctx.send(f"Purged {len(deleted) - 1} messages.", delete_after=5)
     except discord.Forbidden:
-        await ctx.send("I do not have the 'Manage Messages' permission to do this.")
+        await ctx.send("I do not have the 'Manage Messages' permission to do this.", ephmeral=True)
     except Exception as e:
-        await ctx.send(f"An error occured: {e}")
+        await ctx.send(f"An error occured: {e}", ephmeral=True)
 
 
 # Events
@@ -202,6 +202,11 @@ async def on_member_join(member):
 @purge.error
 async def purge_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("You do not have the 'Manage Messages' permission to use this command.")
+        await ctx.send("You do not have the 'Manage Messages' permission to use this command.", ephmeral=True)
+
+@sotw.error
+async def sotw_error(ctx, error):
+    if isinstance(error, commands.MissingRole):
+        await ctx.send("You do not have permission to use this command. Only WebThePanda can use this command!", ephmeral=True)
 
 bot.run(token)
