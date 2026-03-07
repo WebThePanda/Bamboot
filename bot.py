@@ -26,12 +26,13 @@ bot = commands.Bot(command_prefix="b! ", intents=intents)
 
 @bot.command(name="sotw")
 @commands.has_role(1443544544409948272)
-async def sotw():
+async def sotw(ctx):
     channel_id = 1479877488510500956
     channel = bot.get_channel(channel_id)
     panda = 502141502038999041
     cats = 972943470023041044
     bamboot = 1479571065549357362
+    ctx=ctx
 
     embed = discord.Embed(
         title="Staff of The Week",
