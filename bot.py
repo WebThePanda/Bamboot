@@ -133,7 +133,7 @@ async def sotw(ctx, dur: int):
     if channel:
         view = SOTWButtons(panda_id=panda, cats_id=cats, bamboot_id=bamboot, filename=file_name)
         msg = await channel.send(embed=embed, view=view)
-        await ctx.send(f"Poll started in {channel.mention} for {dur} {timeDisplay}!")
+        await ctx.send(f"Poll started in {channel.mention} for {timeDisplay}!")
 
         await asyncio.sleep(duration)
 
