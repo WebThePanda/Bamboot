@@ -43,7 +43,7 @@ async def purge(ctx, amount: int):
 # Events
 
 @bot.event
-async def on_member_join(member, ctx):
+async def on_member_join(ctx, member):
     channel_id = 1443544545261518850
     channel = bot.get_channel(channel_id)
     embed = discord.Embed(
