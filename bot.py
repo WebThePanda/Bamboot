@@ -57,10 +57,10 @@ class SOTWButtons(discord.ui.View):
     async def update_embed(self, interaction: discord.Interaction):
         embed = interaction.message.embeds[0]
         embed.description = (
-            "Staff of The Week!\nVote for this week's best staff!\n\nThis weeks choices are:"
-            f"**Panda (Owner):** {self.p_votes} votes\n"
-            f"**Cats (Owner's Alt):** {self.c_votes} votes\n"
-            f"**Bamboot (Bot):** {self.b_votes} votes"
+            "Staff of The Week!\nVote for this week's best staff!\n\nThis week's choices are:\n"
+            f"**Panda (Owner): {self.p_votes}** votes\n"
+            f"**Cats (Owner's Alt): {self.c_votes}** votes\n"
+            f"**Bamboot (Bot): {self.b_votes}** votes"
         )
         await interaction.response.edit_message(embed=embed, view=self)
 
@@ -112,7 +112,7 @@ async def sotw(ctx):
 
     embed = discord.Embed(
         title="Staff of The Week",
-        description="Staff of The Week!\n \nVote for this weeks best staff!\n \nThis weeks choices are:\nWebThePanda (Owner)\nCats (Cool Guy)\nBamboot (Bot)",
+        description="Vote for this weeks best staff!\n\nThis weeks choices are:\n**WebThePanda (Owner): 0** votes\n**Cats (Cool Guy): 0** votes\n**Bamboot (Bot): 0** votes\n",
         colour=discord.Color.blurple()
     )
 
@@ -126,12 +126,12 @@ async def sotw(ctx):
         for child in view.children:
             child.disabled = True
         
-        scores = {"WebThePanda": view.p_votes, "Cats": view.c_votes, "Bamboot": view.b_id}
+        scores = {"WebThePanda": view.p_votes, "Cats": view.c_votes, "Bamboot": view.b_votes}
         winner = max(scores, key=scores.get)
 
         end_embed = discord.Embed(
             title="Staff of The Week - Results",
-            description=f"The results are in!\n\n**Winner:** {winner} with {scores[winner]} votes.\n\nCongratulate them in <#{generalChat_id}>!",
+            description=f"The results are in!\n\nWinner: **{winner}** with **{scores[winner]}** votes.\n\nCongratulate them in <#{generalChat_id}>!",
             color=discord.Color.gold()
         )
         await msg.edit(embed=end_embed)
