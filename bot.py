@@ -98,7 +98,7 @@ class SOTWButtons(discord.ui.View):
 
 @bot.command(name="sotw")
 @commands.has_role(1443544544409948272)
-async def sotw(ctx):
+async def sotw(ctx, dur: int):
     channel_id = 1479877488510500956
     channel = bot.get_channel(channel_id)
     generalChat_id = 1443544545420771378
@@ -108,7 +108,7 @@ async def sotw(ctx):
     bamboot = 1479571065549357362
     
     file_name = "sotw_data.json"
-    duration = 60
+    duration = dur
 
     embed = discord.Embed(
         title="Staff of The Week",
