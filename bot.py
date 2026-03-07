@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import json
 import asyncio
-import datetime
+import time
 
 # Load token and id from .env
 load_dotenv()
@@ -115,10 +115,7 @@ async def sotw(ctx, dur: int):
     
     file_name = "sotw_data.json"
     duration = dur
-
-    start_time = int(datetime.now())
-
-    endTimeUnix = int(start_time + duration)
+    endTimeUnix = int(time.time() + duration)
 
     if duration >= 3600:
         timeVal = duration // 3600
