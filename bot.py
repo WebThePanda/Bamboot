@@ -156,7 +156,7 @@ async def sotw(ctx, dur: int):
         else:
             pass
         
-        await msg.edit(embed=end_embed)
+        await msg.edit(embed=end_embed, view=None)
 
         if os.path.exists(file_name):
             os.remove(file_name)
