@@ -102,6 +102,8 @@ async def sotw(ctx, dur: int):
     channel_id = 1479877488510500956
     channel = bot.get_channel(channel_id)
     generalChat_id = 1443544545420771378
+
+    winnerRole = 1479924640754307103
     
     panda = 502141502038999041
     cats = 972943470023041044
@@ -135,6 +137,8 @@ async def sotw(ctx, dur: int):
             color=discord.Color.gold()
         )
         await msg.edit(embed=end_embed)
+        member = winner
+        await member.add_roles(winnerRole)
 
         if os.path.exists(file_name):
             os.remove(file_name)
