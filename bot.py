@@ -49,9 +49,10 @@ async def on_member_join(member):
     channel_id = 1443544545261518850
     channel = bot.get_channel(channel_id)
     memberRole = member.guild.get_role(1443544544409948267)
+    
     embed = discord.Embed(
-        title="Welcome to the community.",
-        description=f"Welcome {member} to ShardSMP's discord server. We hope you enjoy your stay.",
+        title="Welcome to ShardSMP.",
+        description=f"<@&1049064880315052032> Hey {member.mention}",
         color=discord.Color.pink()
     )
     embed.set_author(
@@ -64,9 +65,9 @@ async def on_member_join(member):
     if memberRole:
         await member.add_roles(memberRole)
 
-
-# Error
-
+@bot.command(name="test")
+async def test(ctx):
+    await ctx.send_message(f"<@&1049064880315052032>")
 
 
 bot.run(token)
