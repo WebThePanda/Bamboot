@@ -67,7 +67,7 @@ async def on_member_join(member):
 
 @bot.command(name="test")
 async def test(ctx):
-    await ctx.send_message(f"<@&1049064880315052032>")
+    await ctx.send(f"<@&1049064880315052032>")
 
 
 bot.run(token)
