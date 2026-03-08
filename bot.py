@@ -61,7 +61,7 @@ async def on_member_join(member):
         ),
         color=discord.Color.pink()
     )
-    embed.set_image(url="https://www.imgur.com/a/rI5BPrc")
+    embed.set_image(url="https://i.imgur.com/Xt0RmUE.png")
     embed.set_author(
         name=f"Enjoy your stay",
         icon_url=member.guild.icon.url
