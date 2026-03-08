@@ -53,7 +53,7 @@ async def on_member_join(member):
     embed = discord.Embed(
         title="Welcome to ShardSMP.",
         description=(
-            f"<:1049064880315052032:1469864421114380329> Hey {member.mention}, fancy seeing you here!\n"
+            f"<:pinkChicken:1480189572100001842> Hey {member.mention}, fancy seeing you here!\n"
             "Make sure to check out our channels and to have an awesome stay here at ShardSMP!\n"
             "<:connectionHeart:1480198420718289026> **IP:** server-adress\n"
             "<:mcBedrock:1480198677380333703> **Port:** port\n"
