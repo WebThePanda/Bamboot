@@ -135,10 +135,15 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
-@bot.command(name="countingscores")
+@bot.command(name="countscore")
 async def countscore(ctx):
     current = counter.data["currentNum"]
     high = counter.data["highScore"]
     await ctx.send(f"📊 **Stats:**\n- Current: **{current}**\n- High Score: **{high}**")
+
+#Tickets
+
+
+    
 
 bot.run(token)
