@@ -45,10 +45,10 @@ async def purge_error(ctx, error):
 
 # Welcome message + Autorole
 @bot.event
-async def on_member_join(member, ctx):
+async def on_member_join(member):
     channel_id = 1443544545261518850
     channel = bot.get_channel(channel_id)
-    memberRole = ctx.guild.get_role(1443544544409948267)
+    memberRole = member.guild.get_role(1443544544409948267)
     embed = discord.Embed(
         title="Welcome to the community.",
         description=f"Welcome {member} to ShardSMP's discord server. We hope you enjoy your stay.",
@@ -61,7 +61,7 @@ async def on_member_join(member, ctx):
     
     if channel:
         await channel.send(embed=embed)
-    member.add_roles(memberRole)
+    await member.add_roles(memberRole)
 
 
 # Error
