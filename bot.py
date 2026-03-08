@@ -61,7 +61,8 @@ async def on_member_join(member):
     
     if channel:
         await channel.send(embed=embed)
-    await member.add_roles(memberRole)
+    if memberRole:
+        await member.add_roles(memberRole)
 
 
 # Error
