@@ -160,12 +160,19 @@ async def countscore(ctx):
 async def ticketsetup(ctx, channel: discord.TextChannel):
     await ctx.send(f"Ticket embed sent in {channel.mention}")
 
+
+#Sync
 @bot.command(name="sync")
+@commands.is_owner()
 async def sync(ctx):
     bot.tree.copy_global_to(guild=ctx.guild)
     synced = await bot.tree.sync(guild=ctx.guild)
     await ctx.send(f"Done! {len(synced)} commands are now live in this server.")
-    
+
+@sync.error
+async def sync_error(ctx, error):
+    if isinstance(error, commands.NotOwner):
+        await ctx.send("Only the bot owner can use this command.")    
 
 if __name__ == "__main__":
     if not token:
