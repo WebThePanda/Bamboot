@@ -21,10 +21,6 @@ intents.messages = True
 # Bot Setup
 bot = commands.Bot(command_prefix="s!", intents=intents)
 
-@bot.event
-async def on_ready():
-    await bot.tree.sync()
-
 # -- Purge --
 @bot.hybrid_command(name="purge", description="Deletes X amount of messages.")
 @commands.has_permissions(manage_messages=True)
