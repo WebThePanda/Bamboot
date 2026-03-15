@@ -160,4 +160,11 @@ async def sync(ctx):
     await ctx.send(f"Done! {len(synced)} commands are now live in this server.")
     
 
-bot.run(token)
+if __name__ == "__main__":
+    if not token:
+        print("❌ ERROR: The 'token' variable is missing in Railway Variables!")
+    else:
+        try:
+            bot.run(token)
+        except Exception as e:
+            print(f"❌ CRITICAL ERROR DURING STARTUP: {e}")
