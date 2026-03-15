@@ -132,19 +132,16 @@ counter = countingManager()
 async def on_message(message):
     countChannelID = 1470445117621010670
 
+    if not message.author.bot and message.channel.id == countChannelID:
+        if message.content.isdigit():
+            num = int(message.content)
+            success, resultMSG = counter.checkNum(message.author.id, num)
 
-    if message.author.bot or message.channel.id != countChannelID:
-        return
-    
-    if message.content.isdigit():
-        num = int(message.content)
-        success, resultMSG = counter.checkNum(message.author.id, num)
-
-        if success:
-            await message.add_reaction("✅")
-        else:
-            await message.add_reaction("❌")
-            await message.channel.send(resultMSG)
+            if success:
+                await message.add_reaction("✅")
+            else:
+                await message.add_reaction("❌")
+                await message.channel.send(resultMSG)
     
     await bot.process_commands(message)
 
