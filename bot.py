@@ -21,8 +21,12 @@ intents.messages = True
 # Bot Setup
 bot = commands.Bot(command_prefix="s!", intents=intents)
 
+@bot.event
+async def on_ready():
+    await bot.tree.sync()
+
 # -- Purge --
-@bot.command(name="purge")
+@bot.hybrid_command(name="purge", description="Deletes X amount of messages.")
 @commands.has_permissions(manage_messages=True)
 async def purge(ctx, amount: int):
     if amount <= 0:
@@ -48,16 +52,16 @@ async def purge_error(ctx, error):
 async def on_member_join(member):
     channel_id = 1470121423161790560
     channel = bot.get_channel(channel_id)
-    memberRole = member.guild.get_role(1443544544409948267)
+    memberRole = member.guild.get_role(1469860668525117613)
     
     embed = discord.Embed(
         title="Welcome to ShardSMP! 🥳",
         description=(
-            f"<:pinkChicken:1480189572100001842> Hey {member.mention}, fancy seeing you here!\n"
+            f"<:emoji_50:1470201146667696229> Hey {member.mention}, fancy seeing you here!\n"
             "Make sure to check out our channels and to have an awesome stay here at ShardSMP!\n"
-            "<:connectionHeart:1480198420718289026> **IP:** server-adress\n"
-            "<:mcBedrock:1480198677380333703> **Port:** port\n"
-            "<:shoppingCart:1480199374318600202> **Shop:** store-link\n"
+            "<:M_connection:1469864216046473343>  **IP:** server-adress\n"
+            "<:1000022062:1469864439770775634>  **Port:** port\n"
+            "<:crash_dollar:1469864431738552381> **Shop:** store-link\n"
         ),
         color=discord.Color.purple()
     )
@@ -136,15 +140,23 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
-@bot.command(name="countscore")
+@bot.hybrid_command(name="countscore", description="Shows current number and highscore for counting minigame.")
 async def countscore(ctx):
     current = counter.data["currentNum"]
     high = counter.data["highScore"]
     await ctx.send(f"📊 **Stats:**\n- Current: **{current}**\n- High Score: **{high}**")
 
 #Tickets
+@bot.hybrid_command(name="ticketsetup", description="Use this command to setup the Ticket system.")
+async def ticketsetup(ctx, channel: discord.TextChannel):
+    await ctx.send(f"Ticket embed sent in {channel.mention}")
 
-
+@bot.command()
+@commands.has_role(1482803957993836746)
+async def sync(ctx):
+    bot.tree.copy_global_to(guild=ctx.guild)
+    synced = await bot.tree.sync(guild=ctx.guild)
+    await ctx.send(f"Done! {len(synced)} commands are now live in this server.")
     
 
 bot.run(token)
