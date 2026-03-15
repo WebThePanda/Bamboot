@@ -152,7 +152,7 @@ async def ticketsetup(ctx, channel: discord.TextChannel):
     await ctx.send(f"Ticket embed sent in {channel.mention}")
 
 @bot.command()
-@commands.has_role(1482803957993836746)
+@commands.has_role("Panda")
 async def sync(ctx):
     bot.tree.copy_global_to(guild=ctx.guild)
     synced = await bot.tree.sync(guild=ctx.guild)
