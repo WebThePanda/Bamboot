@@ -11,9 +11,13 @@ import time
 load_dotenv()
 token = os.environ.get('token') or os.getenv('token')
 
-if token is None:
-    print("FATAL ERROR: Token not found in environment variables!")
-    
+if token:
+    print(f"✅ Token found! Length: {len(token)} characters.")
+else:
+    print("❌ FATAL: No token found in Railway Variables.")
+    # This lists all available keys (but NOT values) to help us debug
+    print(f"Available variables: {list(os.environ.keys())}")
+
 clientid = os.getenv('botid')
 
 # Intents
