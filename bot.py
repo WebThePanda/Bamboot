@@ -172,6 +172,18 @@ async def sync_error(ctx, error):
     if isinstance(error, commands.NotOwner):
         await ctx.send("Only the bot owner can use this command.")
 
+#ClearCommands
+@bot.command(name="clearcommands")
+@commands.is_owner()
+async def clearcommands(ctx):
+    bot.tree.clear_commands(guild=None)
+    await bot.tree.sync()
+
+    bot.tree.clear_commands(guild=ctx.guild)
+    await bot.tree.sync(guild=ctx.guild)
+
+    await ctx.send("Cleared all slash commands!")
+
 #Shutdown
 @bot.command(name="shutdown")
 @commands.is_owner()
